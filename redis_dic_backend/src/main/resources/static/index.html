@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link rel="stylesheet" href="public/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="public/plugins/jqgrid/ui.jqgrid-bootstrap.css"/>
+    <script src="public/libs/jquery.min.js"></script>
+    <script src="public/plugins/layer/layer.js"></script>
+    <script src="public/libs/bootstrap.min.js"></script>
+    <script src="public/plugins/jqgrid/grid.locale-cn.js"></script>
+    <script src="public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+    <script src="public/js/common.js"></script>
+    <style>
+        .wrap-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 16px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, .4);
+            z-index: 999;
+        }
+
+        .dialog {
+            position: relative;
+            margin: 15% auto;
+            width: 300px;
+            background-color: #F8F8F8;
+        }
+
+        .dialog .dialog-header {
+            text-align: left;
+            height: 40px;
+            padding: 10px;
+            background-color: #eee;
+        }
+
+        .dialog .dialog-body {
+            height: 30px;
+            margin: 10px;
+        }
+
+        .dialog .dialog-footer {
+            height: 40px;
+            padding: 8px;
+            /*background-color: whitesmoke;*/
+        }
+
+        .btn {
+            width: 70px;
+            padding: 2px;
+            color: #fff;
+            background-color: #2e8ded;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .ml50 {
+            margin-left: 50px;
+        }
+    </style>
+</head>
+<body>
+<h1>Redis Dic</h1>
+<!--<form id="form1">-->
+<table border="0">
+    <tr>
+        <td>DatabaseName:</td>
+        <td>
+            <select id="databaseName" style="width: 150px;height: 21px;" onchange="databaseChange()">
+            </select>
+            <input id="database_input" style="width: 130px;height: 21px;margin-left: -154px;" type="text"/>
+        </td>
+    </tr>
+    <tr>
+        <td>ProjectName:</td>
+        <td>
+            <select id="projectName" style="width: 150px;height: 21px;" onchange="projectChange()">
+            </select>
+            <input id="project_input" style="width: 130px;height: 21px;margin-left: -154px;" type="text"/>
+        </td>
+    </tr>
+    <tr>
+        <td>RedisKey:</td>
+        <td><input id="redisKey" type="text" name="redisKey" style="width: 150px;height: 21px;"/></td>
+    </tr>
+    <tr>
+        <td>RedisType:</td>
+        <td>
+            <select id="redisType" name="redisType" style="width: 150px;height: 21px;">
+                <option value="All" selected="selected">All</option>
+                <option value="String">String</option>
+                <option value="Hash">Hash</option>
+                <option value="List">List</option>
+                <option value="Set">Set</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Used:</td>
+        <td><input id="used" type="text" name="used" style="width: 150px;height: 21px;"/></td>
+    </tr>
+    <tr>
+        <td>LifeCycle:</td>
+        <td><input id="lifeCycle" type="text" name="lifeCycle" style="width: 150px;height: 21px;"/></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td align="right"><input id="save" type="button" value="保存" onclick="saveRedisDic()"><input id="search"
+                                                                                                    type="button"
+                                                                                                    value="查询"
+                                                                                                    onclick="searchRedisDic()">
+        </td>
+    </tr>
+</table>
+<div class="share_top_style">
+    <a href="javascript:void(0)" class="" onClick="dofristshare('sina')"><img src="images/sina.png" alt="新浪微博"></a>
+
+    <a href="javascript:void(0)" class="" onClick="dofristshare('tx')"><img src="images/tx.png" alt="腾讯微博"></a>
+
+    <a href="javascript:void(0)" class="" onClick="dofristshare('rr')"><img src="images/rr.png" alt="人人网"></a>
+
+    <a href="javascript:void(0)" class="" onClick="dofristshare('qzone')"><img src="images/qq.png" alt="QQ空间"></a>
+
+    <a href="javascript:void(0)" class="" onClick="dofristshare('douban')"><img src="images/db.png" alt="豆瓣"></a>
+</div>
+<div class="wrap-dialog hide">
+    <div class="dialog">
+        <div class="dialog-header">
+            <span class="dialog-title">删除确认</span>
+        </div>
+        <div class="dialog-body">
+            <span class="dialog-message">你确认删除此条信息？</span>
+        </div>
+        <div class="dialog-footer">
+            <input type="button" class="btn" id="confirm" value="确认"/>
+            <input type="button" class="btn ml50" id="cancel" value="取消"/>
+        </div>
+    </div>
+</div>
+<p>
+    -----------------------------------------------------------------------------
+</p>
+<table id="jqGrid" border="1">
+
+</table>
+<div id="jqGridPager"></div>
+</body>
+<script type="text/javascript">
+    (function(){
+        var p = {
+            url:'http://www.baidu.com', /*获取URL，可加上来自分享到QQ标识，方便统计*/
+            desc:'', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
+            title:'新年快乐,马年吉祥', /*分享标题(可选)*/
+            summary:'', /*分享摘要(可选)*/
+            pics:'http://www.baidu.com/img/bdlogo.gif', /*分享图片(可选)*/
+            flash: '', /*视频地址(可选)*/
+            site:'', /*分享来源(可选) 如：QQ分享*/
+            style:'201',
+            width:32,
+            height:32
+        };
+        var s = [];
+        for(var i in p){
+            s.push(i + '=' + encodeURIComponent(p[i]||''));
+        }
+        document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shareqq/index.html?',s.join('&'),'" target="_blank">分享到QQ</a>'].join(''));
+    })();
+</script>
+<!--<script src="http://connect.qq.com/widget/loader/loader.js" widget="shareqq" charset="utf-8"></script>-->
+<script type="text/javascript">
+    $(function () {
+        $("#jqGrid").jqGrid({
+            url: '/dic/pagelist',
+            datatype: "json",
+            colModel: [
+                {label: 'databaseName', name: 'databaseName', width: '5%'},
+                {label: 'projectName', name: 'projectName', width: '15%'},
+                {label: 'redisKey', name: 'redisKey', width: '15%'},
+                {label: 'redisType', name: 'redisType', width: '15%'},
+                {label: 'used', name: 'used', width: '20%'},
+                {label: 'lifeCycle', name: 'lifeCycle', width: '10%'},
+                {label: 'updateTime', name: 'updateTime', width: '15%'},
+                {label: 'operation', name: 'operation', width: '5%', formatter: gridOperat, align: 'center'}
+            ],
+            viewrecords: true,
+            height: jqGridConfig.height,
+            rowNum: jqGridConfig.rowNum,
+            rowList: jqGridConfig.rowList,
+            rownumbers: true,
+            rownumWidth: 55,
+            autowidth: true,
+            // multiselect: true,
+            //开启隔行变色
+            altRows: true,
+            //设置行class*
+            altclass: 'lineColor',
+            multiselect: false,
+            pager: "#jqGridPager",
+            jsonReader: {
+                root: "result.records",
+                page: "result.current",
+                total: "result.pages",
+                records: "result.total"
+            },
+            prmNames: {
+                page: "page",
+                rows: "limit",
+                order: "order"
+            },
+            gridComplete: function () {
+                //隐藏grid底部滚动条
+                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
+            }
+        });
+
+        /**
+         * redis库下拉框数据获取
+         */
+        $.ajax({
+            type: "GET",
+            cache: true,
+            contentType: 'application/json;charset=UTF-8',
+            url: "/dic/databaselist",
+            success: function (data) {
+                data.result.forEach(function (value) {
+                    $("#databaseName").append('<option value="' + value + '">' + value + '</option>');
+                    $("#databaseName")[0].selectedIndex = -1;
+                })
+            },
+            error: function (data) {
+                alert('error');
+            }
+        })
+
+        /**
+         * 项目名称下拉框数据
+         */
+        $.ajax({
+            type: "GET",
+            cache: true,
+            contentType: 'application/json;charset=UTF-8',
+            url: "/dic/projectlist",
+            success: function (data) {
+                data.result.forEach(function (value) {
+                    $("#projectName").append('<option value="' + value + '">' + value + '</option>');
+                    $("#projectName")[0].selectedIndex = -1;
+                })
+            },
+            error: function (data) {
+                alert('error');
+            }
+        })
+    });
+
+    function databaseChange() {
+        $("#database_input").val($("#databaseName option:selected").text());
+    }
+
+    function projectChange() {
+        $("#project_input").val($("#projectName option:selected").text());
+    }
+
+    function saveRedisDic() {
+        var database = $("#database_input").val();
+        if (database == '' || database.trim() == '') {
+            alert("请输入者选择Redis数据库!");
+            return;
+        }
+        var project = $("#project_input").val();
+        if (project == '' || project.trim() == '') {
+            alert("请输入或选择项目名称!")
+            return;
+        }
+        var type = $("#redisType").val();
+        if (type == "All") {
+            alert("请选择数据类型!");
+            return;
+        }
+        var json = "{\"databaseName\":\"" + $("#database_input").val() + "\",\"projectName\":\"" + $("#project_input").val() + "\",\"redisKey\":\"" + $("#redisKey").val() + "\",\"redisType\":\"" + $("#redisType").val() + "\",\"used\":\"" + $("#used").val() + "\",\"lifeCycle\":" + $("#lifeCycle").val() + "}";
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            cache: true,
+            contentType: 'application/json;charset=UTF-8',
+            url: "/dic/insert",
+            data: json,
+            success: function (data) {
+                $("#jqGrid").trigger("reloadGrid");
+                // window.location.href="http://localhost:8081/template/index.html";
+            },
+            error: function (data) {
+                alert('error');
+            }
+        })
+    }
+
+    function gridOperat(rowid, iRow, iCol, e) {
+        var html = '<div class="ie-inline-block margin-r10"  onclick="delRow(' + iRow.rowId + ')" title="删除"><span><input type="button" value="DEL"/></span></div>';
+        return html;
+    }
+
+    function searchRedisDic() {
+        var databaseName = $("#database_input").val();
+        var projectName = $("#project_input").val();
+        var redisKey = $("#redisKey").val();
+        var redisType = $("#redisType").val();
+        var used = $("#used").val();
+        var lifeCycle = $("#lifeCycle").val();
+        $("#jqGrid").jqGrid('setGridParam', {
+            url: "/dic/pagelist?databaseName=" + databaseName + "&projectName=" + projectName + "&redisKey=" + redisKey + "&redisType=" + redisType + "&used=" + used + "&lifeCycle=" + lifeCycle,
+            cache: true,
+            // postData:json, //发送数据
+            page: 1
+        }).trigger("reloadGrid"); //重新载入
+    }
+
+    function dialogBox(message, yesCallback, noCallback) {
+        if (message) {
+            $('.dialog-message').html(message);
+        }
+        // 显示遮罩和对话框
+        $('.wrap-dialog').removeClass("hide");
+        // 确定按钮
+        $('#confirm').click(function () {
+            $('.wrap-dialog').addClass("hide");
+            yesCallback();
+        });
+        // 取消按钮
+        $('#cancel').click(function () {
+            $('.wrap-dialog').addClass("hide");
+            noCallback();
+        });
+    }
+
+    function delRow(rowid) {
+        var message = "你确认删除此条信息？？";
+        dialogBox(message,
+            function () {
+                $.ajax({
+                    type: "GET",
+                    cache: true,
+                    contentType: 'application/json;charset=UTF-8',
+                    url: "/dic/deletebyid?id=" + rowid,
+                    success: function (data) {
+                        $("#jqGrid").trigger("reloadGrid");
+                    },
+                    error: function (data) {
+                        alert('error');
+                    }
+                })
+            },
+            function () {
+                console.log("canceled");
+            }
+        );
+    }
+
+    function dofristshare(type) {
+        var title = encodeURIComponent("新年快乐,马年吉祥");
+        var link = encodeURIComponent('http://www.baidu.com');
+        var image = encodeURIComponent('http://www.baidu.com/img/bdlogo.gif');
+
+        if (type == "sina") {
+            window.open("http://v.t.sina.com.cn/share/share.php?url=" + link + "&title=" + title + "&content=utf8&pic=" + image);
+        }
+
+        if (type == "tx") {
+            window.open("http://v.t.qq.com/share/share.php?url=" + link + "&title=" + title + "&pic=" + image);
+        }
+
+        if (type == "qzone") {
+            window.open("http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=" + link + "&title=" + title  + "&pics=" + image);
+        }
+
+        if (type == "rr") {
+            window.open("http://widget.renren.com/dialog/share?resourceUrl=" + link + "&title=" + title  + "&pic=" + image);
+        }
+
+        if (type == "douban") {
+            window.open("http://www.douban.com/recommend/?url=" + link + "&title=" + title + "&image=" + image);
+        }
+
+        return false;
+
+    }
+
+</script>
+</html>

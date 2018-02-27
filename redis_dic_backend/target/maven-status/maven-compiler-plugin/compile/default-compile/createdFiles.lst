@@ -1,0 +1,4 @@
+com\enlink\redisdic\backend\controller\RedisDicController.class
+com\enlink\redisdic\backend\model\ResultMessage.class
+com\enlink\redisdic\backend\service\RedisDicService.class
+com\enlink\redisdic\backend\RedisDicBackendApp.class

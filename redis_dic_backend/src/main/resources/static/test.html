@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link rel="stylesheet" href="public/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="public/plugins/jqgrid/ui.jqgrid-bootstrap.css"/>
+    <script src="public/libs/jquery.min.js"></script>
+    <script src="public/plugins/layer/layer.js"></script>
+    <script src="public/libs/bootstrap.min.js"></script>
+    <script src="public/plugins/jqgrid/grid.locale-cn.js"></script>
+    <script src="public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+    <script src="public/js/common.js"></script>
+    <style>
+        .wrap-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 16px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, .4);
+            z-index: 999;
+        }
+
+        .dialog {
+            position: relative;
+            margin: 15% auto;
+            width: 300px;
+            background-color: #F8F8F8;
+        }
+
+        .dialog .dialog-header {
+            text-align: left;
+            height: 40px;
+            padding: 10px;
+            background-color: #eee;
+        }
+
+        .dialog .dialog-body {
+            height: 30px;
+            margin: 10px;
+        }
+
+        .dialog .dialog-footer {
+            height: 40px;
+            padding: 8px;
+            /*background-color: whitesmoke;*/
+        }
+
+        .btn {
+            width: 70px;
+            padding: 2px;
+            color: #fff;
+            background-color: #2e8ded;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .ml50 {
+            margin-left: 50px;
+        }
+    </style>
+</head>
+<body>
+<!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui-button -mob-share-open">分享</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+        <li class="-mob-share-qq"><p>QQ好友</p></li>
+        <li class="-mob-share-douban"><p>豆瓣</p></li>
+        <li class="-mob-share-facebook"><p>Facebook</p></li>
+        <li class="-mob-share-twitter"><p>Twitter</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=23c68ca61ee6a"></script>
+</body>
+<script type="text/javascript">
+
+    // (function () {
+    //     var p = {
+    //         url: 'http://www.baidu.com', /*获取URL，可加上来自分享到QQ标识，方便统计*/
+    //         desc: '', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
+    //         title: '新年快乐,马年吉祥', /*分享标题(可选)*/
+    //         summary: '', /*分享摘要(可选)*/
+    //         pics: 'http://www.baidu.com/img/bdlogo.gif', /*分享图片(可选)*/
+    //         flash: '', /*视频地址(可选)*/
+    //         site: '', /*分享来源(可选) 如：QQ分享*/
+    //         style: '201',
+    //         width: 32,
+    //         height: 32
+    //     };
+    //     var s = [];
+    //     for (var i in p) {
+    //         s.push(i + '=' + encodeURIComponent(p[i] || ''));
+    //     }
+    //     document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shareqq/index.html?', s.join('&'), '" target="_blank">分享到QQ</a>'].join(''));
+    // })();
+</script>
+</html>

@@ -1,0 +1,10 @@
+/**
+弹窗样式
+ */
+body .dialog-class .layui-layer-title{background:#53c7a0; color:#fff; border: none;}
+body .dialog-class .layui-layer-btn{border-top:1px solid #E9E7E7}
+body .dialog-class .layui-layer-btn a{background:#53c7a0;}
+body .dialog-class .layui-layer-btn .layui-layer-btn1{background:#f0ad4e;color:#fff;}
+body .dialog-class .layui-layer-btn .layui-layer-btn0{border-color:#53c7a0 ;}
+body .dialog-class .layui-layer-ico{background:url(../img/close.png) no-repeat;}
+body .dialog-class .layui-layer-setwin a{width: 20px;height: 20px}
