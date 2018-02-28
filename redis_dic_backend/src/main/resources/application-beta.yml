@@ -5,5 +5,5 @@ spring:
     datasource:
       driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://120.55.98.151:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
-      username: myuser
-      password: mypassword
+      username: root
+      password: richenlin
