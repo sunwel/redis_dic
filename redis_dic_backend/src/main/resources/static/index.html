@@ -120,17 +120,6 @@
         </td>
     </tr>
 </table>
-<div class="share_top_style">
-    <a href="javascript:void(0)" class="" onClick="dofristshare('sina')"><img src="images/sina.png" alt="新浪微博"></a>
-
-    <a href="javascript:void(0)" class="" onClick="dofristshare('tx')"><img src="images/tx.png" alt="腾讯微博"></a>
-
-    <a href="javascript:void(0)" class="" onClick="dofristshare('rr')"><img src="images/rr.png" alt="人人网"></a>
-
-    <a href="javascript:void(0)" class="" onClick="dofristshare('qzone')"><img src="images/qq.png" alt="QQ空间"></a>
-
-    <a href="javascript:void(0)" class="" onClick="dofristshare('douban')"><img src="images/db.png" alt="豆瓣"></a>
-</div>
 <div class="wrap-dialog hide">
     <div class="dialog">
         <div class="dialog-header">
@@ -153,27 +142,6 @@
 </table>
 <div id="jqGridPager"></div>
 </body>
-<script type="text/javascript">
-    (function(){
-        var p = {
-            url:'http://www.baidu.com', /*获取URL，可加上来自分享到QQ标识，方便统计*/
-            desc:'', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
-            title:'新年快乐,马年吉祥', /*分享标题(可选)*/
-            summary:'', /*分享摘要(可选)*/
-            pics:'http://www.baidu.com/img/bdlogo.gif', /*分享图片(可选)*/
-            flash: '', /*视频地址(可选)*/
-            site:'', /*分享来源(可选) 如：QQ分享*/
-            style:'201',
-            width:32,
-            height:32
-        };
-        var s = [];
-        for(var i in p){
-            s.push(i + '=' + encodeURIComponent(p[i]||''));
-        }
-        document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shareqq/index.html?',s.join('&'),'" target="_blank">分享到QQ</a>'].join(''));
-    })();
-</script>
 <!--<script src="http://connect.qq.com/widget/loader/loader.js" widget="shareqq" charset="utf-8"></script>-->
 <script type="text/javascript">
     $(function () {
@@ -361,35 +329,6 @@
                 console.log("canceled");
             }
         );
-    }
-
-    function dofristshare(type) {
-        var title = encodeURIComponent("新年快乐,马年吉祥");
-        var link = encodeURIComponent('http://www.baidu.com');
-        var image = encodeURIComponent('http://www.baidu.com/img/bdlogo.gif');
-
-        if (type == "sina") {
-            window.open("http://v.t.sina.com.cn/share/share.php?url=" + link + "&title=" + title + "&content=utf8&pic=" + image);
-        }
-
-        if (type == "tx") {
-            window.open("http://v.t.qq.com/share/share.php?url=" + link + "&title=" + title + "&pic=" + image);
-        }
-
-        if (type == "qzone") {
-            window.open("http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=" + link + "&title=" + title  + "&pics=" + image);
-        }
-
-        if (type == "rr") {
-            window.open("http://widget.renren.com/dialog/share?resourceUrl=" + link + "&title=" + title  + "&pic=" + image);
-        }
-
-        if (type == "douban") {
-            window.open("http://www.douban.com/recommend/?url=" + link + "&title=" + title + "&image=" + image);
-        }
-
-        return false;
-
     }
 
 </script>
